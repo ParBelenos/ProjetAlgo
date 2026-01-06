@@ -11,6 +11,7 @@ field = [[0, 0, 0, 0],
          [0, 0, 0, 0], 
          [0, 0, 0, 0]]
 
+show_start_text = True
 running = True
 
 while running:
@@ -37,7 +38,10 @@ while running:
         for j in range(4):
             pg.draw.rect(window, (205, 192, 180), (j*100+30, i*100+10, 90, 90), 0, 8)
 
-
+    # Draw start text
+    if show_start_text:
+        start_text = font.render("Press spacebar to start", True, "black")
+        window.blit(start_text, (20, 500))
 
 
 
