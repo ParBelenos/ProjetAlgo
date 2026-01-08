@@ -26,16 +26,6 @@ def draw_start_text():
         start_text = font.render("Press spacebar to start", True, "black")
         window.blit(start_text, (80, 500))
 
-def start_game():
-    show_start_text = False
-    print(field)
-    game_started = True
-    for i in range(2):  # Choose two random set of coords != (ß,0)
-        start_num = rd.choice([2,4])
-        r, c = rd.choice(zero_position)
-        field[r][c] = start_num
-    return show_start_text, game_started
-
 while running:
     for event in pg.event.get():
         if event.type == pg.QUIT:
