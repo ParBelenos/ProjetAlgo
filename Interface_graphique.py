@@ -12,6 +12,7 @@ field = [[0, 0, 0, 0],
          [0, 0, 0, 0]]
 
 show_start_text = True
+game_started = False
 running = True
 
 # Draw background tiles
