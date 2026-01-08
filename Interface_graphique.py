@@ -40,6 +40,10 @@ while running:
     for event in pg.event.get():
         if event.type == pg.QUIT:
             running = False
+        elif event.type == pg.KEYDOWN:
+            # Start game
+            if event.key == pg.K_SPACE and not game_started:
+                start_game()
 
     window.fill("white")
     
