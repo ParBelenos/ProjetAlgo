@@ -34,14 +34,6 @@ def draw_start_tiles():
             elif val == 4:
                 pg.draw.rect(window, (236, 224, 200), (c*100+30, r*100+10, 90, 90), 0, 8)
 
-def add_number():
-        if any(0 in row for row in field):
-            number = rd.choice([2,4])
-            r, c = rd.choice(zero_position)
-            field[r][c] = number
-         else:
-            pass
-
 def start_game():
     for i in range(2):  # Choose two random set of coords != (ß,0)
         start_num = rd.choice([2,4])
@@ -423,3 +415,4 @@ while running:
 
 
 pg.quit()
+
