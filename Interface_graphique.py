@@ -38,24 +38,46 @@ def draw_start_tiles():
 
 
 def add_number():
-    zero_position = [
-        (r,c)
-        for r, row in enumerate(field)
-        for c, val in enumerate(row)
-        if val == 0
-    ]
-    #if any(0 in row for row in field):
-    probability = rd.randint(1,10)
-    if probability < 10:
-        number = 2
-    else:
-        number = 4
-    r, c = rd.choice(zero_position)
-    field[r][c] = number
-    print(field)
-    '''else:
+    
+    if can_combine(r = 0, c = 0) == False:
         game_over_text = font.render("Game Over", True, "black")
-        window.blit(game_over_text, (80, 500))'''
+        window.blit(game_over_text, (80, 500))
+        return
+    else:
+        zero_position = [
+            (r,c)
+            for r, row in enumerate(field)
+            for c, val in enumerate(row)
+            if val == 0
+        ]
+        if zero_position:
+            probability = rd.randint(1,10)
+            if probability < 10:
+                number = 2
+            else:
+                number = 4
+            r, c = rd.choice(zero_position)
+            field[r][c] = number
+            print(field)
+
+def can_combine(r = 0, c = 0):
+    if r >= 4:
+        return False
+    if field[r][c] != 0:
+        if c + 1 < 4 and field[r][c] == field[r][c + 1]:
+            print("here")
+            return True
+        if r + 1 < 4 and field[r][c] == field[r+1][c]:
+            print("here")
+            return True
+    if c + 1 < 4:
+        next_c = c + 1
+        next_r = r
+    else:
+        next_c = 0
+        next_r = r + 1
+
+    return can_combine(next_r, next_c)
 
 def start_game():
     show_start_text = False
