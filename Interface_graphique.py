@@ -193,7 +193,7 @@ def move_haut():
             res_temp = []
 
         for y in range(4):
-            res2[y] = [f for f in res2[y] if f != 0]
+            res1[y] = [f for f in res1[y] if f != 0]
             
         
                         
@@ -249,7 +249,7 @@ def move_bas():
             res_temp = []
 
         for y in range(4):
-            res2[y] = [f for f in res2[y] if f != 0]
+            res1[y] = [f for f in res1[y] if f != 0]
         
                 
         
