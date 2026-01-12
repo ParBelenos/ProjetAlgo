@@ -34,6 +34,67 @@ def draw_start_tiles():
             elif val == 4:
                 pg.draw.rect(window, (236, 224, 200), (c*100+30, r*100+10, 90, 90), 0, 8)
 
+def draw_tiles():
+     for r, row in enumerate(field):
+        for c, val in enumerate(row):
+            rectangle = pg.Rect(c*100+30, r*100+10, 90, 90)
+
+            if val == 2:
+                pg.draw.rect(window, (237, 229, 218), rectangle, 0, 8)
+                text_num2 = font.render(str(val), True, (119, 113, 101))
+                text_pos = text_num2.get_rect(center=rectangle.center)
+                window.blit(text_num2, text_pos)
+            elif val == 4:
+                pg.draw.rect(window, (236, 224, 200), rectangle, 0, 8)
+                text_num4 = font.render(str(val), True, (119, 113, 101))
+                text_pos = text_num4.get_rect(center=rectangle.center)
+                window.blit(text_num4, text_pos)
+            elif val == 8:
+                pg.draw.rect(window, (239, 178, 124), rectangle, 0, 8)
+                text_num8 = font.render(str(val), True, "white")
+                text_pos = text_num8.get_rect(center=rectangle.center)
+                window.blit(text_num8, text_pos)
+            elif val == 16:
+                pg.draw.rect(window, (242, 150, 103), rectangle, 0, 8)
+                text_num16 = font.render(str(val), True, "white")
+                text_pos = text_num16.get_rect(center=rectangle.center)
+                window.blit(text_num16, text_pos)
+            elif val == 32:
+                pg.draw.rect(window, (243, 125, 99), rectangle, 0, 8)
+                text_num32 = font.render(str(val), True, "white")
+                text_pos = text_num32.get_rect(center=rectangle.center)
+                window.blit(text_num32, text_pos)
+            elif val == 64:
+                pg.draw.rect(window, (243, 95, 65), rectangle, 0, 8)
+                text_num64 = font.render(str(val), True, "white")
+                text_pos = text_num64.get_rect(center=rectangle.center)
+                window.blit(text_num64, text_pos)
+            elif val == 128:
+                pg.draw.rect(window, (234, 207, 118), rectangle, 0, 8)
+                text_num128 = font.render(str(val), True, "white")
+                text_pos = text_num128.get_rect(center=rectangle.center)
+                window.blit(text_num128, text_pos)
+            elif val == 256:
+                pg.draw.rect(window, (237, 203, 103), rectangle, 0, 8)
+                text_num256 = font.render(str(val), True, "white")
+                text_pos = text_num256.get_rect(center=rectangle.center)
+                window.blit(text_num256, text_pos)
+            elif val == 512:
+                pg.draw.rect(window, (236, 200, 90), rectangle, 0, 8)
+                text_num512 = font.render(str(val), True, "white")
+                text_pos = text_num512.get_rect(center=rectangle.center)
+                window.blit(text_num512, text_pos)
+            elif val == 1024:
+                pg.draw.rect(window, (231, 194, 87), rectangle, 0, 8)
+                text_num1024 = font.render(str(val), True, "white")
+                text_pos = text_num1024.get_rect(center=rectangle.center)
+                window.blit(text_num1024, text_pos)
+            elif val == 2048:
+                pg.draw.rect(window, (230, 188, 76), rectangle, 0, 8)
+                text_num2048 = font.render(str(val), True, "white")
+                text_pos = text_num2048.get_rect(center=rectangle.center)
+                window.blit(text_num2048, text_pos)
+
 def start_game():
     for i in range(2):  # Choose two random set of coords != (ß,0)
         start_num = rd.choice([2,4])
@@ -341,65 +402,7 @@ while running:
     draw_start_tiles()
     
     # Draw tiles
-    for r, row in enumerate(field):
-        for c, val in enumerate(row):
-            rectangle = pg.Rect(c*100+30, r*100+10, 90, 90)
-
-            if val == 2:
-                pg.draw.rect(window, (237, 229, 218), rectangle, 0, 8)
-                text_num2 = font.render(str(val), True, (119, 113, 101))
-                text_pos = text_num2.get_rect(center=rectangle.center)
-                window.blit(text_num2, text_pos)
-            elif val == 4:
-                pg.draw.rect(window, (236, 224, 200), rectangle, 0, 8)
-                text_num4 = font.render(str(val), True, (119, 113, 101))
-                text_pos = text_num4.get_rect(center=rectangle.center)
-                window.blit(text_num4, text_pos)
-            elif val == 8:
-                pg.draw.rect(window, (239, 178, 124), rectangle, 0, 8)
-                text_num8 = font.render(str(val), True, "white")
-                text_pos = text_num8.get_rect(center=rectangle.center)
-                window.blit(text_num8, text_pos)
-            elif val == 16:
-                pg.draw.rect(window, (242, 150, 103), rectangle, 0, 8)
-                text_num16 = font.render(str(val), True, "white")
-                text_pos = text_num16.get_rect(center=rectangle.center)
-                window.blit(text_num16, text_pos)
-            elif val == 32:
-                pg.draw.rect(window, (243, 125, 99), rectangle, 0, 8)
-                text_num32 = font.render(str(val), True, "white")
-                text_pos = text_num32.get_rect(center=rectangle.center)
-                window.blit(text_num32, text_pos)
-            elif val == 64:
-                pg.draw.rect(window, (243, 95, 65), rectangle, 0, 8)
-                text_num64 = font.render(str(val), True, "white")
-                text_pos = text_num64.get_rect(center=rectangle.center)
-                window.blit(text_num64, text_pos)
-            elif val == 128:
-                pg.draw.rect(window, (234, 207, 118), rectangle, 0, 8)
-                text_num128 = font.render(str(val), True, "white")
-                text_pos = text_num128.get_rect(center=rectangle.center)
-                window.blit(text_num128, text_pos)
-            elif val == 256:
-                pg.draw.rect(window, (237, 203, 103), rectangle, 0, 8)
-                text_num256 = font.render(str(val), True, "white")
-                text_pos = text_num256.get_rect(center=rectangle.center)
-                window.blit(text_num256, text_pos)
-            elif val == 512:
-                pg.draw.rect(window, (236, 200, 90), rectangle, 0, 8)
-                text_num512 = font.render(str(val), True, "white")
-                text_pos = text_num512.get_rect(center=rectangle.center)
-                window.blit(text_num512, text_pos)
-            elif val == 1024:
-                pg.draw.rect(window, (231, 194, 87), rectangle, 0, 8)
-                text_num1024 = font.render(str(val), True, "white")
-                text_pos = text_num1024.get_rect(center=rectangle.center)
-                window.blit(text_num1024, text_pos)
-            elif val == 2048:
-                pg.draw.rect(window, (230, 188, 76), rectangle, 0, 8)
-                text_num2048 = font.render(str(val), True, "white")
-                text_pos = text_num2048.get_rect(center=rectangle.center)
-                window.blit(text_num2048, text_pos)
+    draw_tiles()
 
     # Draw game over or win text
     if game_over == True:
@@ -415,4 +418,5 @@ while running:
 
 
 pg.quit()
+
 
