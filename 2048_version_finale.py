@@ -1,0 +1,427 @@
+import pygame as pg
+import random as rd
+
+pg.init()
+window = pg.display.set_mode((450, 550))
+font = pg.font.SysFont("arial", 36)
+
+field = [[0, 0, 0, 0], 
+         [0, 0, 0, 0], 
+         [0, 0, 0, 0], 
+         [0, 0, 0, 0]]
+
+
+show_start_text = True
+game_started = False
+game_over = False
+game_ended = False
+
+def draw_background():
+    for i in range(4):
+        for j in range(4):
+            pg.draw.rect(window, (205, 192, 180), (j*100+30, i*100+10, 90, 90), 0, 8)
+
+def draw_start_text():
+    if show_start_text:
+        start_text = font.render("Press spacebar to start", True, "black")
+        window.blit(start_text, (80, 500))
+
+def draw_start_tiles():
+    for r, row in enumerate(field):
+        for c, val in enumerate(row):
+            if val == 2:
+                pg.draw.rect(window, (237, 229, 218), (c*100+30, r*100+10, 90, 90), 0, 8)
+            elif val == 4:
+                pg.draw.rect(window, (236, 224, 200), (c*100+30, r*100+10, 90, 90), 0, 8)
+
+def add_number():
+        if any(0 in row for row in field):
+            number = rd.choice([2,4])
+            r, c = rd.choice(zero_position)
+            field[r][c] = number
+            print(field)
+        else:
+            pass
+
+def start_game():
+    print(field)
+    for i in range(2):  # Choose two random set of coords != (ß,0)
+        start_num = rd.choice([2,4])
+        r, c = rd.choice(zero_position)
+        field[r][c] = start_num
+
+def add_number():
+    zero_position = [
+            (r,c)
+            for r, row in enumerate(field)
+            for c, val in enumerate(row)
+            if val == 0
+        ]
+    if zero_position:
+            probability = rd.randint(1,10)
+            if probability < 10:
+                number = 2
+            else:
+                number = 4
+            r, c = rd.choice(zero_position)
+            field[r][c] = number
+            print(field)
+    else:
+        if can_combine(r = 0, c = 0) == False:
+            global game_over
+            global game_ended
+            game_over = True
+            game_ended = True
+            return game_over, game_ended
+    win(r = 0, c = 0)
+
+def win(r = 0, c = 0):
+    if r >= 4:
+        return False
+    if field[r][c] == 2048:
+        global game_ended
+        game_ended = True
+        return True, game_ended
+    if c + 1 < 4:
+        next_c = c + 1
+        next_r = r
+    else:
+        next_c = 0
+        next_r = r + 1
+
+    return win(next_r, next_c)
+
+def can_combine(r = 0, c = 0):
+    if r >= 4:
+        return False
+    if field[r][c] != 0:
+        if c + 1 < 4 and field[r][c] == field[r][c + 1]:
+            return True
+        if r + 1 < 4 and field[r][c] == field[r+1][c]:
+            return True
+    if c + 1 < 4:
+        next_c = c + 1
+        next_r = r
+    else:
+        next_c = 0
+        next_r = r + 1
+
+    return can_combine(next_r, next_c)
+
+def move_up():
+    res_temp = []
+    res1 = [[],[],[],[]]
+    res2 = [[],[],[],[]]
+    res3 = [[],[],[],[]]
+    nb_temp = [[],[],[],[]]
+
+    for a in range(4):
+        for b in range(4):
+            res_temp.append(field[b][a])
+        res1[3-a] = res_temp
+        res_temp = []
+            
+    for y in range(4):
+            res1[y] = [f for f in res1[y] if f != 0]
+                    
+    for k in range(4):
+        for l in range(len(res1[k])-1):
+            if res1[k][l] == res1[k][l+1]:
+                res2[k].append(res1[k][l]*2)
+                res1[k][l+1] = 0
+            else:
+                res2[k].append(res1[k][l])
+                
+    for o in range(4):
+        if len(res1[o]) == 1:
+            res2[o] = res1[o]
+        elif len(res1[o])!= 0:
+            if res1[o][-1] != res1[o][-2]:
+                nb_temp[o].append(res1[o][-1])
+    
+    for e in range(4):
+        res2[e] = [f for f in res2[e] if f != 0]
+    
+    
+    
+    for r in range(4):
+        if nb_temp[r] != []:
+            res2[r].append(nb_temp[r][0])
+    
+    for m in range(4):
+        for n in range(4-len(res2[m])):
+            res2[m].append(0)
+            
+    for c in range(4):
+        for d in range(4):
+            res_temp.append(res2[3-d][c])
+        res3[c] = res_temp
+        res_temp = []
+    return res3
+
+def move_down():
+    res1 = [[],[],[],[]]
+    res2 = [[],[],[],[]]
+    res_temp = []
+    res3 = [[],[],[],[]]
+    nb_temp = [[],[],[],[]]
+
+    for a in range(4):
+        for b in range(4):
+            res_temp.append(field[3-b][a])
+        res1[a] = res_temp
+        res_temp = []
+            
+    for y in range(4):
+            res1[y] = [f for f in res1[y] if f != 0]
+                    
+    for k in range(4):
+        for l in range(len(res1[k])-1):
+            if res1[k][l] == res1[k][l+1]:
+                res2[k].append(res1[k][l]*2)
+                res1[k][l+1] = 0
+            else:
+                res2[k].append(res1[k][l])
+                
+    for o in range(4):
+        if len(res1[o]) == 1:
+            res2[o] = res1[o]
+        elif len(res1[o])!= 0:
+            if res1[o][-1] != res1[o][-2]:
+                nb_temp[o].append(res1[o][-1])
+    
+    for e in range(4):
+        res2[e] = [f for f in res2[e] if f != 0]
+    
+    
+    
+    for r in range(4):
+        if nb_temp[r] != []:
+            res2[r].append(nb_temp[r][0])
+    
+    for m in range(4):
+        for n in range(4-len(res2[m])):
+            res2[m].append(0)
+            
+    for c in range(4):
+        for d in range(4):
+            res_temp.append(res2[d][c])
+        res3[3-c] = res_temp
+        res_temp = []
+    return res3
+
+def move_right():
+    res1 = [[],[],[],[]]
+    res2 = [[],[],[],[]]
+    nb_temp = [[],[],[],[]]
+    
+
+    
+    for i in range(4):
+        for j in range(4):
+            if field[i][j] != 0 :
+                res1[i].append(field[i][j])
+    
+    for a in range(4):
+        res1[a] = res1[a][::-1]
+
+    
+    for k in range(4):
+        for l in range(len(res1[k])-1):
+            if res1[k][l] == res1[k][l+1]:
+                res2[k].append(res1[k][l]*2)
+                res1[k][l+1] = 0
+            else:
+                res2[k].append(res1[k][l])
+
+    for o in range(4):
+        if len(res1[o]) == 1:
+            res2[o] = res1[o]
+        elif len(res1[o])!= 0:
+            if res1[o][-1] != res1[o][-2]:
+                nb_temp[o].append(res1[o][-1])
+                
+    
+    
+    for e in range(4):
+        res2[e] = [f for f in res2[e] if f != 0]
+
+    for r in range(4):
+        if nb_temp[r] != []:
+            res2[r].append(nb_temp[r][0])
+    
+    for m in range(4):
+        for n in range(4-len(res2[m])):
+            res2[m].append(0)
+    
+    for c in range(4):
+        res2[c] = res2[c][::-1]
+    return res2
+
+def move_left():
+    res1 = [[],[],[],[]]
+    res2 = [[],[],[],[]]
+    nb_temp = [[],[],[],[]]
+    for i in range(4):
+        for j in range(4):
+            if field[i][j] != 0 :
+                res1[i].append(field[i][j])
+                    
+        
+    for k in range(4):
+        for l in range(len(res1[k])-1):
+            if res1[k][l] == res1[k][l+1]:
+                res2[k].append(res1[k][l]*2)
+                res1[k][l+1] = 0
+            else:
+                res2[k].append(res1[k][l])
+                
+    for o in range(4):
+        if len(res1[o]) == 1:
+            res2[o] = res1[o]
+        elif len(res1[o])!= 0:
+            if res1[o][-1] != res1[o][-2]:
+                nb_temp[o].append(res1[o][-1])
+    
+    for e in range(4):
+        res2[e] = [f for f in res2[e] if f != 0]
+    
+    
+    
+    for r in range(4):
+        if nb_temp[r] != []:
+            res2[r].append(nb_temp[r][0])
+            nb_temp[r] = []
+    
+    for m in range(4):
+        for n in range(4-len(res2[m])):
+            res2[m].append(0)
+    return res2
+
+running = True
+
+while running:
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+            running = False
+        elif event.type == pg.KEYDOWN:
+            # Start game
+            if event.key == pg.K_SPACE and not game_started:
+                start_game()
+                show_start_text = False
+                game_started = True
+            
+            # Arrow keys
+            elif event.key == pg.K_UP and not game_ended and game_started:
+                field = move_up()
+                add_number()
+                
+            elif event.key == pg.K_DOWN and not game_ended and game_started:
+                field = move_down()
+                add_number()
+
+            elif event.key == pg.K_RIGHT and not game_ended and game_started:
+                field = move_right()
+                add_number()
+
+            elif event.key == pg.K_LEFT and not game_ended and game_started:
+                field = move_left()
+                add_number()
+
+                
+
+# CODE
+    
+    zero_position = [
+        (r,c)
+        for r, row in enumerate(field)
+        for c, val in enumerate(row)
+        if val == 0
+    ]
+
+    window.fill((158, 146, 135))
+
+
+    # Draw background tiles
+    draw_background()
+
+    # Draw start text
+    draw_start_text()
+
+    # Draw start tiles
+    draw_start_tiles()
+    
+    # Draw tiles
+    for r, row in enumerate(field):
+        for c, val in enumerate(row):
+            rectangle = pg.Rect(c*100+30, r*100+10, 90, 90)
+
+            if val == 2:
+                pg.draw.rect(window, (237, 229, 218), rectangle, 0, 8)
+                text_num2 = font.render(str(val), True, (119, 113, 101))
+                text_pos = text_num2.get_rect(center=rectangle.center)
+                window.blit(text_num2, text_pos)
+            elif val == 4:
+                pg.draw.rect(window, (236, 224, 200), rectangle, 0, 8)
+                text_num4 = font.render(str(val), True, (119, 113, 101))
+                text_pos = text_num4.get_rect(center=rectangle.center)
+                window.blit(text_num4, text_pos)
+            elif val == 8:
+                pg.draw.rect(window, (239, 178, 124), rectangle, 0, 8)
+                text_num8 = font.render(str(val), True, "white")
+                text_pos = text_num8.get_rect(center=rectangle.center)
+                window.blit(text_num8, text_pos)
+            elif val == 16:
+                pg.draw.rect(window, (242, 150, 103), rectangle, 0, 8)
+                text_num16 = font.render(str(val), True, "white")
+                text_pos = text_num16.get_rect(center=rectangle.center)
+                window.blit(text_num16, text_pos)
+            elif val == 32:
+                pg.draw.rect(window, (243, 125, 99), rectangle, 0, 8)
+                text_num32 = font.render(str(val), True, "white")
+                text_pos = text_num32.get_rect(center=rectangle.center)
+                window.blit(text_num32, text_pos)
+            elif val == 64:
+                pg.draw.rect(window, (243, 95, 65), rectangle, 0, 8)
+                text_num64 = font.render(str(val), True, "white")
+                text_pos = text_num64.get_rect(center=rectangle.center)
+                window.blit(text_num64, text_pos)
+            elif val == 128:
+                pg.draw.rect(window, (234, 207, 118), rectangle, 0, 8)
+                text_num128 = font.render(str(val), True, "white")
+                text_pos = text_num128.get_rect(center=rectangle.center)
+                window.blit(text_num128, text_pos)
+            elif val == 256:
+                pg.draw.rect(window, (237, 203, 103), rectangle, 0, 8)
+                text_num256 = font.render(str(val), True, "white")
+                text_pos = text_num256.get_rect(center=rectangle.center)
+                window.blit(text_num256, text_pos)
+            elif val == 512:
+                pg.draw.rect(window, (236, 200, 90), rectangle, 0, 8)
+                text_num512 = font.render(str(val), True, "white")
+                text_pos = text_num512.get_rect(center=rectangle.center)
+                window.blit(text_num512, text_pos)
+            elif val == 1024:
+                pg.draw.rect(window, (231, 194, 87), rectangle, 0, 8)
+                text_num1024 = font.render(str(val), True, "white")
+                text_pos = text_num1024.get_rect(center=rectangle.center)
+                window.blit(text_num1024, text_pos)
+            elif val == 2048:
+                pg.draw.rect(window, (230, 188, 76), rectangle, 0, 8)
+                text_num2048 = font.render(str(val), True, "white")
+                text_pos = text_num2048.get_rect(center=rectangle.center)
+                window.blit(text_num2048, text_pos)
+
+    # Draw game over or win text
+    if game_over == True:
+        game_over_text = font.render("Game Over", True, "black")
+        window.blit(game_over_text, (150, 450))
+    
+    if win(r = 0, c = 0):
+        win_text = font.render("You Win!", True, "black")
+        window.blit(win_text, (175, 450))
+
+
+    pg.display.flip()
+
+pg.quit()
