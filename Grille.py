@@ -126,7 +126,10 @@ class Grille():
                 res_temp.append(self.grille[b][a])
             res1[3-a] = res_temp
             res_temp = []
-                
+
+        for y in range(4):
+            res2[y] = [f for f in res2[y] if f != 0]
+            
         
                         
             
@@ -181,6 +184,10 @@ class Grille():
                 res_temp.append(self.grille[3-b][a])
             res1[a] = res_temp
             res_temp = []
+
+        for y in range(4):
+            res2[y] = [f for f in res2[y] if f != 0]
+        
                 
         
                         
