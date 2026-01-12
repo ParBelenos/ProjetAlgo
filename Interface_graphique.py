@@ -290,7 +290,7 @@ def move_bas():
             res_temp = []
                 
         
-         return res3 
+        return res3 
 
 
 while running:
@@ -303,111 +303,13 @@ while running:
                 start_game()
             # Arrow keys
             elif event.key == pg.K_UP:
-                direction = "up"
-                res1 = [[],[],[],[]]
-                res2 = [[],[],[],[]]
-                res_temp = []
-                res3 = [[],[],[],[]]
-                nb_temp = [[],[],[],[]]
-
-                for a in range(4):
-                    for b in range(4):
-                        res_temp.append(field[b][a])
-                    res1[3-a] = res_temp
-                    res_temp = []
-                        
-                
-                for k in range(4):
-                    for l in range(len(res1[k])-1):
-                        if res1[k][l] == res1[k][l+1]:
-                            res2[k].append(res1[k][l]*2)
-                            res1[k][l+1] = 0
-                        else:
-                            res2[k].append(res1[k][l])
-                            
-                for o in range(4):
-                    if len(res1[o]) == 1:
-                        res2[o] = res1[o]
-                    elif len(res1[o])!= 0:
-                        if res1[o][-1] != res1[o][-2]:
-                            nb_temp[o].append(res1[o][-1])
-                
-                for e in range(4):
-                    res2[e] = [f for f in res2[e] if f != 0]
-                
-                
-                
-                for r in range(4):
-                    if nb_temp[r] != []:
-                        res2[r].append(nb_temp[r][0])
-                
-                for m in range(4):
-                    for n in range(4-len(res2[m])):
-                        res2[m].append(0)
-                        
-                for c in range(4):
-                    for d in range(4):
-                        res_temp.append(res2[3-d][c])
-                    res3[c] = res_temp
-                    res_temp = []
-                        
-                
-                field = res3
+                field = move_haut()
                 add_number()
             
             elif event.key == pg.K_DOWN:
-                res1 = [[],[],[],[]]
-                res2 = [[],[],[],[]]
-                res_temp = []
-                res3 = [[],[],[],[]]
-                nb_temp = [[],[],[],[]]
-
-                for a in range(4):
-                    for b in range(4):
-                        res_temp.append(field[3-b][a])
-                    res1[a] = res_temp
-                    res_temp = []
-                        
-                
-                                
-                    
-                for k in range(4):
-                    for l in range(len(res1[k])-1):
-                        if res1[k][l] == res1[k][l+1]:
-                            res2[k].append(res1[k][l]*2)
-                            res1[k][l+1] = 0
-                        else:
-                            res2[k].append(res1[k][l])
-                            
-                for o in range(4):
-                    if len(res1[o]) == 1:
-                        res2[o] = res1[o]
-                    elif len(res1[o])!= 0:
-                        if res1[o][-1] != res1[o][-2]:
-                            nb_temp[o].append(res1[o][-1])
-                
-                for e in range(4):
-                    res2[e] = [f for f in res2[e] if f != 0]
-                
-                
-                
-                for r in range(4):
-                    if nb_temp[r] != []:
-                        res2[r].append(nb_temp[r][0])
-                
-                for m in range(4):
-                    for n in range(4-len(res2[m])):
-                        res2[m].append(0)
-                        
-                for c in range(4):
-                    for d in range(4):
-                        res_temp.append(res2[d][c])
-                    res3[3-c] = res_temp
-                    res_temp = []
-                        
-                
-                field = res3
+                field = move_bas()
                 add_number()
+                
 
             elif event.key == pg.K_RIGHT:
                 field = move_right()
