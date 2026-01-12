@@ -39,12 +39,10 @@ def add_number():
             number = rd.choice([2,4])
             r, c = rd.choice(zero_position)
             field[r][c] = number
-            print(field)
-        else:
+         else:
             pass
 
 def start_game():
-    print(field)
     for i in range(2):  # Choose two random set of coords != (ß,0)
         start_num = rd.choice([2,4])
         r, c = rd.choice(zero_position)
@@ -65,7 +63,6 @@ def add_number():
                 number = 4
             r, c = rd.choice(zero_position)
             field[r][c] = number
-            print(field)
     else:
         if can_combine(r = 0, c = 0) == False:
             global game_over
@@ -423,5 +420,6 @@ while running:
 
 
     pg.display.flip()
+
 
 pg.quit()
