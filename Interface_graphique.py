@@ -36,19 +36,26 @@ def draw_start_tiles():
             elif val == 4:
                 pg.draw.rect(window, (236, 224, 200), (c*100+30, r*100+10, 90, 90), 0, 8)
 
+
 def add_number():
-    if any(0 in row for row in field):
-        probability = rd.randint(1,10)
-        if probability < 10:
-            number = 2
-        else:
-            number = 4
-        r, c = rd.choice(zero_position)
-        field[r][c] = number
-        print(field)
+    zero_position = [
+        (r,c)
+        for r, row in enumerate(field)
+        for c, val in enumerate(row)
+        if val == 0
+    ]
+    #if any(0 in row for row in field):
+    probability = rd.randint(1,10)
+    if probability < 10:
+        number = 2
     else:
+        number = 4
+    r, c = rd.choice(zero_position)
+    field[r][c] = number
+    print(field)
+    '''else:
         game_over_text = font.render("Game Over", True, "black")
-        window.blit(game_over_text, (80, 500))
+        window.blit(game_over_text, (80, 500))'''
 
 def start_game():
     show_start_text = False
@@ -59,6 +66,96 @@ def start_game():
         r, c = rd.choice(zero_position)
         field[r][c] = start_num
     return show_start_text, game_started
+
+# Mouvements
+def move_left():
+    res1 = [[],[],[],[]]
+    res2 = [[],[],[],[]]
+    nb_temp = [[],[],[],[]]
+    for i in range(4):
+        for j in range(4):
+            if field[i][j] != 0 :
+                res1[i].append(field[i][j])
+                    
+        
+    for k in range(4):
+        for l in range(len(res1[k])-1):
+            if res1[k][l] == res1[k][l+1]:
+                res2[k].append(res1[k][l]*2)
+                res1[k][l+1] = 0
+            else:
+                res2[k].append(res1[k][l])
+                
+    for o in range(4):
+        if len(res1[o]) == 1:
+            res2[o] = res1[o]
+        elif len(res1[o])!= 0:
+            if res1[o][-1] != res1[o][-2]:
+                nb_temp[o].append(res1[o][-1])
+    
+    for e in range(4):
+        res2[e] = [f for f in res2[e] if f != 0]
+    
+    
+    
+    for r in range(4):
+        if nb_temp[r] != []:
+            res2[r].append(nb_temp[r][0])
+            nb_temp[r] = []
+    
+    for m in range(4):
+        for n in range(4-len(res2[m])):
+            res2[m].append(0)
+    
+    return res2
+def move_right():
+    res1 = [[],[],[],[]]
+    res2 = [[],[],[],[]]
+    nb_temp = [[],[],[],[]]
+    
+
+    
+    for i in range(4):
+        for j in range(4):
+            if field[i][j] != 0 :
+                res1[i].append(field[i][j])
+    
+    for a in range(4):
+        res1[a] = res1[a][::-1]
+
+    
+    for k in range(4):
+        for l in range(len(res1[k])-1):
+            if res1[k][l] == res1[k][l+1]:
+                res2[k].append(res1[k][l]*2)
+                res1[k][l+1] = 0
+            else:
+                res2[k].append(res1[k][l])
+
+    for o in range(4):
+        if len(res1[o]) == 1:
+            res2[o] = res1[o]
+        elif len(res1[o])!= 0:
+            if res1[o][-1] != res1[o][-2]:
+                nb_temp[o].append(res1[o][-1])
+                
+    
+    
+    for e in range(4):
+        res2[e] = [f for f in res2[e] if f != 0]
+
+    for r in range(4):
+        if nb_temp[r] != []:
+            res2[r].append(nb_temp[r][0])
+    
+    for m in range(4):
+        for n in range(4-len(res2[m])):
+            res2[m].append(0)
+    
+    for c in range(4):
+        res2[c] = res2[c][::-1]
+    
+    return res2
 
 while running:
     for event in pg.event.get():
@@ -177,96 +274,11 @@ while running:
                 add_number()
 
             elif event.key == pg.K_RIGHT:
-                res1 = [[],[],[],[]]
-                res2 = [[],[],[],[]]
-                nb_temp = [[],[],[],[]]
-                
-
-                
-                for i in range(4):
-                    for j in range(4):
-                        if field[i][j] != 0 :
-                            res1[i].append(field[i][j])
-                
-                for a in range(4):
-                    res1[a] = res1[a][::-1]
-            
-                
-                for k in range(4):
-                    for l in range(len(res1[k])-1):
-                        if res1[k][l] == res1[k][l+1]:
-                            res2[k].append(res1[k][l]*2)
-                            res1[k][l+1] = 0
-                        else:
-                            res2[k].append(res1[k][l])
-
-                for o in range(4):
-                    if len(res1[o]) == 1:
-                        res2[o] = res1[o]
-                    elif len(res1[o])!= 0:
-                        if res1[o][-1] != res1[o][-2]:
-                            nb_temp[o].append(res1[o][-1])
-                            
-                
-                
-                for e in range(4):
-                    res2[e] = [f for f in res2[e] if f != 0]
-            
-                for r in range(4):
-                    if nb_temp[r] != []:
-                        res2[r].append(nb_temp[r][0])
-                
-                for m in range(4):
-                    for n in range(4-len(res2[m])):
-                        res2[m].append(0)
-                
-                for c in range(4):
-                    res2[c] = res2[c][::-1]
-        
-                
-                field = res2
+                field = move_right()
                 add_number()
 
             elif event.key == pg.K_LEFT:
-                res1 = [[],[],[],[]]
-                res2 = [[],[],[],[]]
-                nb_temp = [[],[],[],[]]
-                for i in range(4):
-                    for j in range(4):
-                        if field[i][j] != 0 :
-                            res1[i].append(field[i][j])
-                                
-                    
-                for k in range(4):
-                    for l in range(len(res1[k])-1):
-                        if res1[k][l] == res1[k][l+1]:
-                            res2[k].append(res1[k][l]*2)
-                            res1[k][l+1] = 0
-                        else:
-                            res2[k].append(res1[k][l])
-                            
-                for o in range(4):
-                    if len(res1[o]) == 1:
-                        res2[o] = res1[o]
-                    elif len(res1[o])!= 0:
-                        if res1[o][-1] != res1[o][-2]:
-                            nb_temp[o].append(res1[o][-1])
-                
-                for e in range(4):
-                    res2[e] = [f for f in res2[e] if f != 0]
-                
-                
-                
-                for r in range(4):
-                    if nb_temp[r] != []:
-                        res2[r].append(nb_temp[r][0])
-                        nb_temp[r] = []
-                
-                for m in range(4):
-                    for n in range(4-len(res2[m])):
-                        res2[m].append(0)
-                field = res2
-                
+                field = move_left()
                 add_number()
 
                 
