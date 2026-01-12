@@ -104,7 +104,7 @@ def draw_game_end_text():
         window.blit(win_text, (175, 450))
 
 def start_game():
-    for i in range(2):  # Choose two random set of coords != (ß,0)
+    for i in range(2):
         start_num = rd.choice([2,4])
         r, c = rd.choice(zero_position)
         field[r][c] = start_num
