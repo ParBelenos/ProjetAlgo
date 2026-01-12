@@ -10,11 +10,11 @@ field = [[0, 0, 0, 0],
          [0, 0, 0, 0], 
          [0, 0, 0, 0]]
 
-
 show_start_text = True
 game_started = False
 game_over = False
 game_ended = False
+running = True
 
 def draw_background():
     for i in range(4):
@@ -94,6 +94,14 @@ def draw_tiles():
                 text_num2048 = font.render(str(val), True, "white")
                 text_pos = text_num2048.get_rect(center=rectangle.center)
                 window.blit(text_num2048, text_pos)
+
+def draw_game_end_text():
+    if game_over:
+        game_over_text = font.render("Game Over", True, "black")
+        window.blit(game_over_text, (150, 450))
+    elif game_ended:
+        win_text = font.render("You Win!", True, "black")
+        window.blit(win_text, (175, 450))
 
 def start_game():
     for i in range(2):  # Choose two random set of coords != (ß,0)
@@ -348,7 +356,6 @@ def move_left():
             res2[m].append(0)
     return res2
 
-running = True
 
 while running:
     for event in pg.event.get():
@@ -378,10 +385,6 @@ while running:
                 field = move_left()
                 add_number()
 
-                
-
-# CODE
-    
     zero_position = [
         (r,c)
         for r, row in enumerate(field)
@@ -391,6 +394,7 @@ while running:
 
     window.fill((158, 146, 135))
 
+# Draw everything
 
     # Draw background tiles
     draw_background()
@@ -405,13 +409,7 @@ while running:
     draw_tiles()
 
     # Draw game over or win text
-    if game_over == True:
-        game_over_text = font.render("Game Over", True, "black")
-        window.blit(game_over_text, (150, 450))
-    
-    if win(r = 0, c = 0):
-        win_text = font.render("You Win!", True, "black")
-        window.blit(win_text, (175, 450))
+    draw_game_end_text()
 
 
     pg.display.flip()
